@@ -49,7 +49,7 @@ int initialize_linked_list(int data) {
   return start;
 }
 
-// prints the linked list in special format
+// prints the linked list in a special format
 // () -> () -> () (example)
 void print_list(int start) {
   while (link[start] != -1) {
