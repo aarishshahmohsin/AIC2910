@@ -1,6 +1,6 @@
 /*
-problem statement: to implement insertion, deletion, searching in a linked list
-using arrays
+problem statement: to perform insertion, deletion, searching in a linked list
+using array implementation
 */
 
 /*
@@ -19,11 +19,12 @@ int link[max];
 int info[max];
 
 int avail;
+int start;
 
 // define arbitrary null value
-const int null = -1e4;
+const int null = -1e5;
 
-// fetches node from avail list for furthe use
+// fetches node from avail list for further use
 int getnode() {
   if (avail == -1) {
     printf("overflow\n");
@@ -34,7 +35,7 @@ int getnode() {
   return p;
 }
 
-// pushes unused node to avail list
+// pushes unused node to the avail list
 void freenode(int p) {
   link[p] = avail;
   avail = p;
@@ -82,6 +83,10 @@ int insert(int *start, int loc, int data) {
     printf("enter a valid loaction\n");
     return 1;
   } else if (loc == 1) {
+    if (info[*start] == null) {
+      info[*start] = data;
+      return 0;
+    }
     int temp = getnode();
     info[temp] = data;
     link[temp] = *start;
@@ -125,13 +130,20 @@ void insert_at_last(int start, int data) {
   info[x] = data;
 }
 
-// delete at given location
+// delete the node at the passed location
 int delete(int *start, int loc) {
   if (loc <= 0) {
     printf("enter a valid location\n");
     return 1;
   } else if (loc == 1) {
+    if (link[*start] == -1) {
+      info[*start] = null;
+      printf("all nodes are deleted\n");
+      return 1;
+    }
+    int temp = *start;
     *start = link[*start];
+    freenode(temp);
     return 0;
   } else {
     loc--;
@@ -158,7 +170,7 @@ int delete(int *start, int loc) {
 // deletes the tail node
 int delete_last_elem(int start) {
   if (link[start] == -1) {
-    printf("list only contains one node\n");
+    delete (&start, 1);
     return 1;
   }
   while (link[link[start]] != -1) {
@@ -182,23 +194,31 @@ int main() {
 
   // initializing the linked list i.e. making the start node
 
-  int start = initialize_linked_list(null);
+  start = initialize_linked_list(null);
 
-  // driver using infinite while loop
+  // driver code using an infinite while loop
+
+  int greeting = 1;
 
   while (1) {
-    printf("Welcome to the linked list program!\n");
-    printf("Insert(1) or Delete(2) or Search(3) or Terminate(0)\n");
+
+    if (greeting) {
+      printf("Welcome to the Aarish's Linked List Utility!\n");
+      greeting = 0;
+    }
+
+    printf("Select the operation you want to perform\n");
+    printf("Insert(1), Delete(2), Search(3) or Terminate(0)\n");
 
     int x;
     scanf("%d", &x);
 
     if (x == 0) {
-      printf("The program has been terminated\n");
-      printf("Thankyou for using the program!\n");
+      printf("The program has been successfully terminated\n");
+      printf("Thankyou for using Aarish's Linked List Utility!\n");
       exit(0);
     } else if (x == 1) {
-      printf("insert at the last(1) or beginning/start(2)\n");
+      printf("insert at the last(1) or an entered location(2)\n");
       int inner_x;
       scanf("%d", &inner_x);
       if (inner_x == 1) {
@@ -221,13 +241,13 @@ int main() {
           print_list(start);
         }
       } else {
-        printf("please enter a valid option\n");
+        printf("ERROR! Please enter a valid option\n");
         continue;
       }
     } else if (x == 2) {
-      printf("delete at the last(1) or beginning/start(2)\n");
+      printf("delete at the last(1) or an entered location(2)\n");
       if (info[start] == null) {
-        printf("the list contains no node\n");
+        printf("ERROR! the list contains no node\n");
         continue;
       }
       int inner_x;
@@ -248,7 +268,7 @@ int main() {
           print_list(start);
         }
       } else {
-        printf("please enter a valid option\n");
+        printf("ERROR! Please enter a valid option\n");
         continue;
       }
     } else if (x == 3) {
@@ -262,7 +282,7 @@ int main() {
         printf("the element is at the %dth index\n", search(start, key));
       }
     } else {
-      printf("please enter a valid option\n");
+      printf("ERROR! Please enter a valid option\n");
       continue;
     }
   }
